@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="The IMPACT Matrix — score decisions on Impact, Momentum, Probability, Altitude, Cost, and Time-sensitivity. A better alternative to the Eisenhower Matrix." />
+  <meta name="description" content="The IMPACT Matrix — score decisions on Impact, Momentum, Probability, Altitude, Cost, and Time-sensitivity. A six-axis decision tool with the one-way door override." />
   <title>IMPACT Matrix — A Better Decision Tool</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1014,6 +1014,205 @@
 
     .footer-actions { display: flex; gap: 6px; }
 
+    /* ============ SCORE GUIDE ============ */
+    .score-guide { display: flex; flex-direction: column; }
+    .guide-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 18px;
+      padding: 11px 0;
+      border-bottom: 1px dotted var(--line-soft);
+      align-items: start;
+    }
+    .guide-row:last-child { border-bottom: none; }
+    .guide-name {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      padding-top: 1px;
+    }
+    .guide-name small {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      color: var(--ink-faint);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      margin-left: 4px;
+    }
+    .guide-anchors { display: flex; flex-direction: column; gap: 3px; }
+    .guide-anchor {
+      font-size: 12.5px;
+      line-height: 1.4;
+      color: var(--ink-faint);
+      letter-spacing: 0.005em;
+    }
+    .guide-anchor .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      margin-right: 6px;
+    }
+    .guide-anchor.mid { color: var(--ink-soft); }
+    .guide-anchor.high { color: var(--ink); font-weight: 500; }
+
+    /* ============ RITUAL STEPS ============ */
+    .ritual-steps {
+      list-style: none;
+      counter-reset: ritual;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .ritual-steps li {
+      counter-increment: ritual;
+      position: relative;
+      padding-left: 42px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .ritual-steps li::before {
+      content: counter(ritual, upper-roman);
+      position: absolute;
+      left: 0;
+      top: 1px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--amber);
+      background: var(--amber-bg);
+      padding: 3px 6px 2px;
+      border-radius: 2px;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      min-width: 22px;
+      text-align: center;
+    }
+    .ritual-steps strong {
+      color: var(--ink);
+      font-weight: 600;
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      margin-right: 2px;
+      letter-spacing: -0.005em;
+    }
+
+    /* ============ NOT-FOR LIST ============ */
+    .not-for-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+    .not-for-list li {
+      position: relative;
+      padding-left: 24px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .not-for-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--clay);
+      font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .not-for-list li strong {
+      color: var(--ink);
+      font-weight: 600;
+      font-family: 'Fraunces', serif;
+    }
+
+    /* ============ DISCLAIMER MODAL ============ */
+    .disclaimer-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .disclaimer-modal[hidden] { display: none; }
+    .disclaimer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 22, 18, 0.55);
+      backdrop-filter: blur(2px);
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .disclaimer-card {
+      position: relative;
+      background: var(--paper-bright);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 32px 36px 24px;
+      max-width: 540px;
+      width: 100%;
+      box-shadow: var(--shadow-deep);
+      max-height: 84vh;
+      overflow-y: auto;
+      animation: fadeUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .disclaimer-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 26px;
+      font-weight: 420;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 18px;
+      font-variation-settings: "opsz" 48;
+    }
+    .disclaimer-card p {
+      font-size: 13.5px;
+      line-height: 1.62;
+      color: var(--ink-soft);
+      margin-bottom: 12px;
+    }
+    .disclaimer-card p strong { color: var(--ink); font-weight: 600; }
+    .disclaimer-card .legal-foot {
+      font-size: 11px;
+      color: var(--ink-faint);
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--line);
+    }
+    .disclaimer-card .btn { margin-top: 8px; width: 100%; }
+
+    .footer-block { max-width: 600px; }
+    .footer-block .copy-line {
+      display: block;
+      color: var(--ink);
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    .footer-block .legal-line {
+      display: block;
+      color: var(--ink-faint);
+      font-size: 10px;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      line-height: 1.5;
+    }
+    .footer-block .legal-line .link {
+      background: none;
+      border: none;
+      color: var(--ink);
+      font: inherit;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-style: dotted;
+    }
+    .footer-block .legal-line .link:hover { color: var(--amber); }
+
     /* ============ ANIMATIONS ============ */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(8px); }
@@ -1066,7 +1265,7 @@
         </div>
         <h1 class="title">The <em>IMPACT</em> Matrix.</h1>
         <p class="subtitle">
-          Eisenhower's grid is useful but treats <strong>importance</strong> as a single dimension and ignores effort, reversibility, and compounding value. Score decisions on six axes instead — and separate one-way doors from two-way doors before you commit.
+          Most decision tools treat <strong>importance</strong> as a single dimension and ignore effort, reversibility, and compounding value. Score on six axes instead — and separate <strong>one-way doors</strong> from <strong>two-way doors</strong> before you commit.
         </p>
       </div>
       <div class="masthead-right">
@@ -1239,33 +1438,93 @@
           <div class="decision-list" id="decision-list"></div>
         </section>
 
-        <!-- EISENHOWER vs IMPACT -->
+        <!-- HOW TO SCORE -->
         <section class="panel">
           <div class="panel-header">
-            <h2 class="panel-title">Why this beats Eisenhower</h2>
-            <span class="panel-meta">The upgrade</span>
+            <h2 class="panel-title">How to score</h2>
+            <span class="panel-meta">6 axes · three anchors each</span>
           </div>
+          <div class="score-guide">
+            <div class="guide-row">
+              <div class="guide-name">Impact</div>
+              <div class="guide-anchors">
+                <span class="guide-anchor low"><span class="num">1</span>Nice-to-have — doesn't really matter</span>
+                <span class="guide-anchor mid"><span class="num">3</span>Moves the needle a bit</span>
+                <span class="guide-anchor high"><span class="num">5</span>Game-changer — life or business alters</span>
+              </div>
+            </div>
+            <div class="guide-row">
+              <div class="guide-name">Momentum</div>
+              <div class="guide-anchors">
+                <span class="guide-anchor low"><span class="num">1</span>Standalone task, no follow-on</span>
+                <span class="guide-anchor mid"><span class="num">3</span>Unlocks one or two things</span>
+                <span class="guide-anchor high"><span class="num">5</span>Catalyzes many downstream wins</span>
+              </div>
+            </div>
+            <div class="guide-row">
+              <div class="guide-name">Probability</div>
+              <div class="guide-anchors">
+                <span class="guide-anchor low"><span class="num">1</span>Long shot, untested</span>
+                <span class="guide-anchor mid"><span class="num">3</span>50/50, depends on execution</span>
+                <span class="guide-anchor high"><span class="num">5</span>Near-certain — you've done this before</span>
+              </div>
+            </div>
+            <div class="guide-row">
+              <div class="guide-name">Altitude</div>
+              <div class="guide-anchors">
+                <span class="guide-anchor low"><span class="num">1</span>Busywork, no real alignment</span>
+                <span class="guide-anchor mid"><span class="num">3</span>Tied to a quarterly goal</span>
+                <span class="guide-anchor high"><span class="num">5</span>Directly serves a top-1–3 life/work goal</span>
+              </div>
+            </div>
+            <div class="guide-row">
+              <div class="guide-name">Cost <small>inverse</small></div>
+              <div class="guide-anchors">
+                <span class="guide-anchor low"><span class="num">1</span>Months of work, multiple people</span>
+                <span class="guide-anchor mid"><span class="num">3</span>A week or two of focused time</span>
+                <span class="guide-anchor high"><span class="num">5</span>An hour or less</span>
+              </div>
+            </div>
+            <div class="guide-row">
+              <div class="guide-name">Time-sensitivity</div>
+              <div class="guide-anchors">
+                <span class="guide-anchor low"><span class="num">1</span>Whenever — no real rush</span>
+                <span class="guide-anchor mid"><span class="num">3</span>Should happen this month</span>
+                <span class="guide-anchor high"><span class="num">5</span>Today or it's gone</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-          <div class="compare">
-            <div class="compare-col">
-              <div class="compare-head">Eisenhower weakness</div>
-              <div class="compare-row"><span class="left">"Important" is subjective</span><span class="arrow">→</span><span class="right">Forces you to define why</span></div>
-              <div class="compare-row"><span class="left">No effort dimension</span><span class="arrow">→</span><span class="right">Cost axis prevents over-invest</span></div>
-              <div class="compare-row"><span class="left">Ignores reversibility</span><span class="arrow">→</span><span class="right">One-way door override</span></div>
-              <div class="compare-row"><span class="left">Binary quadrants</span><span class="arrow">→</span><span class="right">Continuous score 0–55</span></div>
-              <div class="compare-row"><span class="left">No compounding logic</span><span class="arrow">→</span><span class="right">Momentum axis (second-order)</span></div>
-              <div class="compare-row"><span class="left">Static</span><span class="arrow">→</span><span class="right">Time-sensitivity keeps it dynamic</span></div>
-            </div>
-            <div class="compare-col">
-              <div class="compare-head">Decision rules</div>
-              <div class="compare-row"><span class="left mono" style="color:var(--amber)">≥ 40</span><span class="arrow">→</span><span class="right">Do it now</span></div>
-              <div class="compare-row"><span class="left mono" style="color:var(--sage)">30–39</span><span class="arrow">→</span><span class="right">Schedule it</span></div>
-              <div class="compare-row"><span class="left mono" style="color:var(--blue)">20–29</span><span class="arrow">→</span><span class="right">Delegate or batch</span></div>
-              <div class="compare-row"><span class="left mono" style="color:var(--clay)">&lt; 20</span><span class="arrow">→</span><span class="right">Delete or revisit quarterly</span></div>
-              <div class="compare-row"><span class="left" style="color:var(--door); font-family:'JetBrains Mono',monospace; font-size:11px">ONE-WAY</span><span class="arrow">→</span><span class="right">2× evidence · consult others</span></div>
-              <div class="compare-row"><span class="left" style="color:var(--sage); font-family:'JetBrains Mono',monospace; font-size:11px">TWO-WAY</span><span class="arrow">→</span><span class="right">Decide fast, bias to action</span></div>
-            </div>
+        <!-- THE FULL RITUAL -->
+        <section class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">The full ritual</h2>
+            <span class="panel-meta">5 minutes · 6 steps</span>
           </div>
+          <ol class="ritual-steps">
+            <li><strong>List candidates.</strong> Aim for 5–10. Start with the obvious ones, then write the ones you keep avoiding.</li>
+            <li><strong>Score each on the six axes.</strong> Gut-feel is fine. Don't research-paralysis yourself into doing nothing.</li>
+            <li><strong>Flag one-way doors.</strong> If you can't easily undo it, slow down and demand 2× the evidence.</li>
+            <li><strong>Sort by score.</strong> The top of the list is your real agenda — not your inbox, not other people's urgencies.</li>
+            <li><strong>Commit to the top three.</strong> The rest waits. Revisit them next session or next quarter.</li>
+            <li><strong>One-way doors get extra scrutiny.</strong> Consult someone who's been there. Sleep on it for 24 hours.</li>
+          </ol>
+        </section>
+
+        <!-- WHEN NOT TO USE -->
+        <section class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">When IMPACT isn't the right tool</h2>
+            <span class="panel-meta">Sometimes just pick</span>
+          </div>
+          <ul class="not-for-list">
+            <li><strong>Trivial reversible choices</strong> — "where should we eat?" Just pick, move on.</li>
+            <li><strong>Pure exploratory or creative work</strong> — let yourself wander before you score.</li>
+            <li><strong>When the gut already said yes</strong> — don't outsource your intuition to a formula.</li>
+            <li><strong>When you don't have enough information</strong> — go gather data first, then come back to score.</li>
+            <li><strong>For life-threatening or emergency situations</strong> — act first, debrief after. This tool is for deliberate decisions, not crisis ones.</li>
+          </ul>
         </section>
       </div>
 
@@ -1404,13 +1663,30 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-      <div>IMPACT Matrix — A better decision tool. Data stays in your browser.</div>
+      <div class="footer-block">
+        <span class="copy-line">© 2026 Timothy Randhir. All rights reserved.</span>
+        <span class="legal-line">A personal decision-making tool — not financial, medical, legal, or professional advice. Your decisions and their consequences are your own. <button class="link" id="show-disclaimer">Read full disclaimer</button>.</span>
+      </div>
       <div class="footer-actions">
         <button class="btn-link" id="export-btn">Export JSON</button>
         <button class="btn-link" id="import-btn">Import</button>
         <input type="file" id="import-file" accept="application/json" style="display:none" />
       </div>
     </footer>
+  </div>
+
+  <!-- DISCLAIMER MODAL -->
+  <div class="disclaimer-modal" id="disclaimer-modal" hidden>
+    <div class="disclaimer-backdrop" id="disc-backdrop"></div>
+    <div class="disclaimer-card" role="dialog" aria-labelledby="disc-title" aria-modal="true">
+      <h3 id="disc-title">Disclaimer &amp; terms of use</h3>
+      <p><strong>No professional advice.</strong> The IMPACT Matrix framework, the scoring rubric, and any outputs generated by this tool are provided for <strong>informational and educational purposes only</strong>. They are not a substitute for professional advice — financial, medical, legal, business, or otherwise — and do not constitute a recommendation to take (or avoid) any specific action.</p>
+      <p><strong>Your decisions are your own.</strong> The choices you make — and any consequences that follow — are entirely your responsibility. The authors and contributors of this tool do not assume liability for outcomes arising from its use.</p>
+      <p><strong>No warranties.</strong> This tool is provided "as is" and "as available," without representations or warranties of any kind, express or implied, including but not limited to warranties of accuracy, completeness, reliability, merchantability, or fitness for a particular purpose.</p>
+      <p><strong>Use at your own risk.</strong> If a decision feels significant — especially involving health, money, relationships, career, or any irreversible commitment — pause and consult a qualified professional before acting.</p>
+      <p class="legal-foot">© 2026 Timothy Randhir. All rights reserved. The IMPACT Matrix framework, the "one-way door" override, the six-axis scoring rubric, and the visual layout are the original work of Timothy Randhir. Personal, non-commercial reuse with attribution is welcome; commercial resale or republication as a competing product is not.</p>
+      <button class="btn" id="close-disclaimer">Understood</button>
+    </div>
   </div>
 
   <script>
@@ -1878,9 +2154,154 @@
         }
         e.target.value = '';
       });
+
+      // disclaimer modal
+      const discModal = document.getElementById('disclaimer-modal');
+      const openDisc = () => discModal.removeAttribute('hidden');
+      const closeDisc = () => discModal.setAttribute('hidden', '');
+      document.getElementById('show-disclaimer').addEventListener('click', openDisc);
+      document.getElementById('close-disclaimer').addEventListener('click', closeDisc);
+      document.getElementById('disc-backdrop').addEventListener('click', closeDisc);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !discModal.hasAttribute('hidden')) closeDisc();
+      });
     }
 
     init();
   </script>
+
+
+<script data-minimax-analytics="minimax-website-analytics-v1">(function(){
+"use strict";
+var t="eyJ2IjoxLCJraWQiOiJwcmUtdXMtMjAyNjA4MTUtdjEiLCJiaXpfaWQiOiJNYXZpcyIsIm5vZGVfaWQiOiI0NTQxNjYwNjYyMjk0MTEiLCJpc3N1ZWRfYXQiOjE3OTI0MzMzMTU4NTB9.ONX_Ep5ao_r5kbcVkdihZ9cY7xn9zC91JZHr9MeHTMc",u="https://agent.minimax.io/minimax-cloud/api/v1/website-traffic/page-views",last="";
+function path(){
+var h=window.location.hash||"",p=h.indexOf("#!")===0?h.slice(2):h.indexOf("#/")===0?h.slice(1):(window.location.pathname||"/");
+p=p.split(/[?#]/,1)[0]||"/";
+if(p.charAt(0)!=="/")p="/"+p;
+p=p.replace(/\/+/g,"/").replace(/%([0-9a-fA-F]{2})/g,function(_,x){var c=String.fromCharCode(parseInt(x,16));return /[A-Za-z0-9._~-]/.test(c)?c:"%"+x.toUpperCase();});
+if(p.length>1)p=p.replace(/\/+$/,"");
+return p||"/";
+}
+function send(){
+var p=path();if(p===last)return;last=p;
+var b="v=1&t="+encodeURIComponent(t)+"&p="+encodeURIComponent(p),ok=false;
+try{if(navigator.sendBeacon){ok=navigator.sendBeacon(u,new Blob([b],{type:"application/x-www-form-urlencoded;charset=UTF-8"}));}}catch(e){}
+if(!ok){try{fetch(u,{method:"POST",body:b,keepalive:true,mode:"no-cors",credentials:"omit",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"}});}catch(e){}}
+}
+["pushState","replaceState"].forEach(function(n){var f=history[n];if(!f)return;history[n]=function(){var r=f.apply(this,arguments);setTimeout(send,0);return r;};});
+window.addEventListener("popstate",send);window.addEventListener("hashchange",send);send();
+})();</script>
+<style>
+#minimax-floating-ball {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 12px;
+  background: #222222;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  color: #F8F8F8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  z-index: 9999;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+#minimax-floating-ball:hover {
+  transform: translateY(-2px);
+  background: #383838;
+}
+.minimax-ball-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.minimax-logo-wave {
+  width: 20px;
+  height: 20px;
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2256%22%20height%3D%2256%22%20viewBox%3D%220%200%2056%2056%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M28.3348%207.91943C32.873%207.91949%2037.04%209.39135%2040.3124%2011.8472C40.5409%2012.0124%2040.7654%2012.1824%2040.9852%2012.3579C42.1524%2011.7112%2044.304%2010.9991%2046.5702%2012.6655C48.3992%2014.0113%2047.1291%2015.8086%2045.7957%2015.3159C45.0606%2015.0442%2044.1229%2014.5753%2043.3602%2014.6538C45.8851%2017.6085%2047.4032%2021.4033%2047.4032%2025.5415C47.4031%2029.2918%2046.153%2032.7573%2044.0399%2035.5737C43.9544%2035.689%2043.8675%2035.8033%2043.7791%2035.9165C43.7734%2035.9238%2043.7683%2035.9317%2043.7625%2035.939L44.1258%2036.2153L44.1229%2036.2163C46.3725%2037.9282%2046.7697%2041.0832%2045.0116%2043.272C43.2563%2045.4561%2040.0071%2045.8422%2037.7606%2044.1333L35.2606%2042.231C34.9961%2042.0299%2034.6857%2041.9712%2034.4002%2042.022C34.3457%2042.0362%2034.2909%2042.0502%2034.2362%2042.064C33.8268%2042.2022%2033.5038%2042.5721%2033.5038%2043.061C33.5067%2045.8275%2031.1993%2048.0717%2028.3514%2048.0806H28.326C25.4779%2048.0719%2023.1698%2045.8277%2023.1727%2043.061C23.1726%2042.5624%2022.8367%2042.1879%2022.4159%2042.0562C22.3774%2042.0464%2022.339%2042.0368%2022.3006%2042.0269C22.0086%2041.9683%2021.6878%2042.0237%2021.4159%2042.231L18.9159%2044.1333C16.6692%2045.8408%2013.4201%2045.4559%2011.6649%2043.27C9.90673%2041.0826%2010.3049%2037.9282%2012.5545%2036.2163L12.911%2035.9438C10.9449%2033.4341%209.67323%2030.4271%209.3602%2027.1636L9.34555%2026.9937C9.33836%2026.9108%209.33199%2026.8278%209.32602%2026.7446C9.32228%2026.6913%209.31852%2026.6379%209.31528%2026.5845C9.30641%2026.4417%209.30001%2026.2985%209.29477%2026.1548C9.29374%2026.1249%209.29272%2026.0949%209.29184%2026.0649C9.28644%2025.8911%209.28306%2025.7166%209.28305%2025.5415C9.28306%2021.4826%2010.7431%2017.7541%2013.1815%2014.8247C12.367%2014.3304%2011.1334%2014.9767%2010.2157%2015.3159C8.8822%2015.8087%207.58607%2013.9754%209.44223%2012.6655C12.3677%2010.6014%2014.5614%2011.8145%2015.4706%2012.5444C15.5911%2012.4448%2015.7134%2012.347%2015.8368%2012.2505C19.182%209.55277%2023.5528%207.91943%2028.3348%207.91943Z%22%20fill%3D%22%23EDEDED%22%20style%3D%22fill%3A%23EDEDED%3Bfill%3Acolor%28display-p3%200.9278%200.9278%200.9278%29%3Bfill-opacity%3A1%3B%22%2F%3E%0A%3C%2Fsvg%3E%0A");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.minimax-ball-text {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.minimax-close-icon {
+  margin-left: 8px;
+  font-size: 16px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.minimax-close-icon:hover {
+  opacity: 1;
+}
+</style>
+<div id="minimax-floating-ball">
+  <div class="minimax-ball-content">
+    <div class="minimax-logo-wave"></div>
+    <span class="minimax-ball-text">Created by MiniMax Agent</span>
+  </div>
+  <div class="minimax-close-icon">×</div>
+</div>
+<script>
+// Initialize floating ball functionality
+function initFloatingBall() {
+  const ball = document.getElementById('minimax-floating-ball');
+  if (!ball) return;
+
+  // Initial animation
+  ball.style.opacity = '0';
+  ball.style.transform = 'translateY(20px)';
+
+  setTimeout(() => {
+    ball.style.opacity = '1';
+    ball.style.transform = 'translateY(0)';
+  }, 500);
+
+  // Handle logo click
+  const ballContent = ball.querySelector('.minimax-ball-content');
+  ballContent.addEventListener('click', function (e) {
+    e.stopPropagation();
+    window.open('https://agent.minimax.io/', '_blank');
+    ball.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      ball.style.transform = 'scale(1)';
+    }, 100);
+  });
+
+  // Handle close button click
+  const closeIcon = ball.querySelector('.minimax-close-icon');
+  closeIcon.addEventListener('click', function (e) {
+    e.stopPropagation();
+    ball.style.opacity = '0';
+    ball.style.transform = 'translateY(20px)';
+
+    setTimeout(() => {
+      ball.style.display = 'none';
+    }, 300);
+  });
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', initFloatingBall); 
+</script>
 </body>
 </html>
