@@ -1,0 +1,1886 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The IMPACT Matrix — score decisions on Impact, Momentum, Probability, Altitude, Cost, and Time-sensitivity. A better alternative to the Eisenhower Matrix." />
+  <title>IMPACT Matrix — A Better Decision Tool</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #F2EDE0;
+      --bg-soft: #EBE3D2;
+      --paper: #F8F3E6;
+      --paper-bright: #FBF7EC;
+      --ink: #1A1612;
+      --ink-soft: #3F3A30;
+      --ink-faint: #857E6E;
+      --ink-ghost: #B5AE9D;
+      --line: #CFC3A8;
+      --line-soft: #E1D7BD;
+      --line-faint: #ECE3CC;
+
+      --amber: #B5731A;
+      --amber-bright: #D8951F;
+      --amber-soft: #E8C57A;
+      --amber-bg: #F5E4BD;
+
+      --sage: #5A7A4A;
+      --sage-bright: #6E9059;
+      --sage-bg: #D9E2C9;
+
+      --blue: #4A6A7E;
+      --blue-bright: #5E8295;
+      --blue-bg: #CDDBE3;
+
+      --clay: #9A4F38;
+      --clay-bright: #B36349;
+      --clay-bg: #E8C9BD;
+
+      --door: #9C2E20;
+      --door-bright: #B53928;
+      --door-bg: #ECC4B7;
+
+      --shadow-soft: 0 1px 0 rgba(26, 22, 18, 0.04), 0 2px 6px rgba(26, 22, 18, 0.04);
+      --shadow-lift: 0 1px 0 rgba(26, 22, 18, 0.06), 0 8px 24px -8px rgba(26, 22, 18, 0.12), 0 16px 48px -16px rgba(26, 22, 18, 0.08);
+      --shadow-deep: 0 2px 0 rgba(26, 22, 18, 0.08), 0 24px 64px -16px rgba(26, 22, 18, 0.20);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 400;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: -0.005em;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* paper grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.55;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.08 0 0 0 0 0.07 0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    /* warm vignette */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 99;
+      background: radial-gradient(ellipse at 50% 0%, rgba(255, 240, 200, 0.18) 0%, transparent 60%),
+                  radial-gradient(ellipse at 100% 100%, rgba(160, 130, 80, 0.06) 0%, transparent 50%);
+    }
+
+    .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-feature-settings: "tnum" 1; }
+    .serif { font-family: 'Fraunces', Georgia, serif; font-feature-settings: "ss01" 1; }
+    .italic { font-style: italic; }
+
+    /* ============ LAYOUT ============ */
+    .app {
+      position: relative;
+      z-index: 2;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 28px 40px 80px;
+    }
+
+    /* ============ MASTHEAD ============ */
+    .masthead {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 40px;
+      padding: 24px 0 32px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .masthead::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -4px;
+      height: 1px;
+      background: var(--line-soft);
+    }
+
+    .masthead-left {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .kicker-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 0 3px var(--amber-bg);
+    }
+
+    .title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 380;
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+      font-variation-settings: "opsz" 144, "SOFT" 30;
+    }
+
+    .title em {
+      font-style: italic;
+      font-weight: 360;
+      color: var(--amber);
+      font-variation-settings: "opsz" 144, "SOFT" 60, "WONK" 1;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--ink-soft);
+      max-width: 56ch;
+      line-height: 1.55;
+    }
+
+    .subtitle strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .masthead-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--ink-faint);
+      text-align: right;
+    }
+
+    .masthead-right .label { letter-spacing: 0.16em; text-transform: uppercase; }
+    .masthead-right .value { color: var(--ink); font-size: 13px; font-weight: 500; }
+
+    .stat-row {
+      display: flex;
+      gap: 20px;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+
+    /* ============ GRID ============ */
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+
+    /* ============ PANELS ============ */
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 24px 24px 20px;
+      position: relative;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .panel-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 22px;
+      font-weight: 420;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      font-variation-settings: "opsz" 24;
+    }
+
+    .panel-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--ink-faint);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ============ FORM ============ */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+
+    .field-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--ink-faint);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .field-label .weight {
+      background: var(--bg-soft);
+      color: var(--ink-soft);
+      padding: 1px 6px;
+      border-radius: 2px;
+      font-size: 9px;
+    }
+
+    .field-label .weight.multi { background: var(--amber-bg); color: var(--amber); }
+
+    input[type="text"], textarea {
+      width: 100%;
+      background: var(--paper-bright);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 9px 12px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      outline: none;
+      border-color: var(--ink);
+      background: #FFFDF6;
+    }
+
+    textarea { resize: vertical; min-height: 50px; line-height: 1.4; }
+
+    .axis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 24px;
+      margin: 18px 0 14px;
+    }
+
+    .axis { display: flex; flex-direction: column; gap: 6px; }
+
+    .axis-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .axis-name {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 480;
+      font-size: 15px;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .axis-q {
+      font-size: 11.5px;
+      color: var(--ink-faint);
+      font-style: italic;
+      line-height: 1.35;
+    }
+
+    .axis-controls { display: flex; align-items: center; gap: 10px; }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      height: 22px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .slider::-webkit-slider-runnable-track {
+      height: 2px;
+      background: var(--line);
+      border-radius: 1px;
+    }
+    .slider::-moz-range-track {
+      height: 2px;
+      background: var(--line);
+      border-radius: 1px;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--paper-bright);
+      border: 2px solid var(--ink);
+      margin-top: -7px;
+      box-shadow: 0 1px 4px rgba(26, 22, 18, 0.15);
+      transition: transform 0.1s, background 0.15s;
+    }
+    .slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--paper-bright);
+      border: 2px solid var(--ink);
+      box-shadow: 0 1px 4px rgba(26, 22, 18, 0.15);
+    }
+
+    .slider:hover::-webkit-slider-thumb { background: var(--amber-bg); border-color: var(--amber); }
+    .slider:hover::-moz-range-thumb { background: var(--amber-bg); border-color: var(--amber); }
+
+    .slider-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      min-width: 14px;
+      text-align: center;
+    }
+
+    .door-toggle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--paper-bright);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+
+    .door-toggle.active {
+      background: var(--door-bg);
+      border-color: var(--door);
+    }
+
+    .door-toggle input { display: none; }
+
+    .door-switch {
+      width: 38px;
+      height: 22px;
+      background: var(--line);
+      border-radius: 11px;
+      position: relative;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .door-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      background: var(--paper-bright);
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .door-toggle.active .door-switch { background: var(--door); }
+    .door-toggle.active .door-switch::after { transform: translateX(16px); }
+
+    .door-text {
+      flex: 1;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .door-text strong {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--ink);
+    }
+    .door-text small {
+      display: block;
+      color: var(--ink-faint);
+      font-size: 11.5px;
+      margin-top: 2px;
+    }
+    .door-toggle.active .door-text small { color: var(--door); font-weight: 500; }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .live-score {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-family: 'Fraunces', serif;
+      color: var(--ink-faint);
+      font-size: 13px;
+    }
+    .live-score-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--ink);
+    }
+    .live-score-num.amber { color: var(--amber); }
+    .live-score-num.sage { color: var(--sage); }
+    .live-score-num.blue { color: var(--blue); }
+    .live-score-num.clay { color: var(--clay); }
+
+    .btn {
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 10px 18px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper-bright);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn:hover { background: #000; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26, 22, 18, 0.2); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    .btn-ghost:hover { background: var(--bg-soft); border-color: var(--ink); }
+
+    .btn-link {
+      background: transparent;
+      color: var(--ink-faint);
+      border: none;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .btn-link:hover { color: var(--ink); }
+
+    /* ============ DECISION LIST ============ */
+    .list-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border: 1px solid var(--line);
+      background: var(--paper-bright);
+      color: var(--ink-faint);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip:hover { color: var(--ink); border-color: var(--ink-faint); }
+    .chip.active {
+      background: var(--ink);
+      color: var(--paper-bright);
+      border-color: var(--ink);
+    }
+
+    .decision-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .decision {
+      background: var(--paper-bright);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 16px;
+      align-items: start;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .decision:hover { border-color: var(--ink-soft); box-shadow: var(--shadow-lift); }
+    .decision.is-door { border-left: 3px solid var(--door); }
+    .decision.committed {
+      background: linear-gradient(135deg, var(--amber-bg) 0%, var(--paper-bright) 60%);
+    }
+
+    .score-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .score-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .score-bar {
+      width: 4px;
+      height: 32px;
+      background: var(--line-soft);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .score-bar::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: currentColor;
+      border-radius: 2px;
+      transition: height 0.4s;
+    }
+    .score-bar.amber { color: var(--amber); }
+    .score-bar.sage { color: var(--sage); }
+    .score-bar.blue { color: var(--blue); }
+    .score-bar.clay { color: var(--clay); }
+
+    .score-num.amber { color: var(--amber); }
+    .score-num.sage { color: var(--sage); }
+    .score-num.blue { color: var(--blue); }
+    .score-num.clay { color: var(--clay); }
+
+    .body-cell { min-width: 0; }
+
+    .decision-head {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .decision-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 18px;
+      font-weight: 460;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .action-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .action-tag.amber { background: var(--amber-bg); color: var(--amber); }
+    .action-tag.sage { background: var(--sage-bg); color: var(--sage); }
+    .action-tag.blue { background: var(--blue-bg); color: var(--blue); }
+    .action-tag.clay { background: var(--clay-bg); color: var(--clay); }
+
+    .door-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 2px;
+      background: var(--door-bg);
+      color: var(--door);
+      flex-shrink: 0;
+    }
+
+    .desc {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .axis-readout {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .axis-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .axis-cell-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: var(--ink-faint);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .axis-cell-track {
+      height: 3px;
+      background: var(--line-soft);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .axis-cell-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      background: var(--ink-soft);
+      border-radius: 2px;
+    }
+    .axis-cell-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .actions-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-end;
+    }
+    .icon-btn {
+      width: 26px;
+      height: 26px;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      cursor: pointer;
+      color: var(--ink-faint);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { color: var(--ink); border-color: var(--ink-soft); background: var(--paper); }
+    .icon-btn.commit:hover { color: var(--amber); border-color: var(--amber); background: var(--amber-bg); }
+    .icon-btn.committed { color: var(--amber); border-color: var(--amber); background: var(--amber-bg); }
+
+    .empty {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--ink-faint);
+    }
+    .empty-icon {
+      font-family: 'Fraunces', serif;
+      font-size: 64px;
+      font-style: italic;
+      color: var(--ink-ghost);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .empty-text {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+    .empty-sub {
+      font-size: 13px;
+      color: var(--ink-faint);
+      max-width: 36ch;
+      margin: 0 auto;
+    }
+
+    /* ============ MATRIX ============ */
+    .matrix-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1.05 / 1;
+    }
+
+    .matrix-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .matrix-axis-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      fill: var(--ink-faint);
+    }
+
+    .matrix-quadrant {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 13px;
+      font-style: italic;
+      fill: var(--ink-faint);
+      opacity: 0.5;
+    }
+
+    .matrix-quadrant-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .bubble {
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+      transform-origin: center;
+    }
+    .bubble:hover { transform: scale(1.15); }
+    .bubble.dim { opacity: 0.18; }
+    .bubble.highlight { transform: scale(1.25); }
+
+    .bubble-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      fill: var(--paper-bright);
+      pointer-events: none;
+      text-anchor: middle;
+    }
+
+    /* legend */
+    .matrix-legend {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--line);
+      flex-wrap: wrap;
+    }
+
+    .legend-block { display: flex; align-items: center; gap: 8px; }
+
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .legend-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      color: var(--ink-faint);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ============ RITUAL ============ */
+    .ritual {
+      background: linear-gradient(135deg, #1A1612 0%, #2A241B 100%);
+      color: var(--paper-bright);
+      border-radius: 4px;
+      padding: 24px 26px 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ritual::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(229, 184, 91, 0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .ritual-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .ritual-title {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 380;
+      letter-spacing: -0.02em;
+      font-style: italic;
+      font-variation-settings: "opsz" 144, "SOFT" 50;
+    }
+
+    .ritual-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: rgba(248, 243, 230, 0.5);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .ritual-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .ritual-item {
+      display: grid;
+      grid-template-columns: 30px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 12px 14px;
+      background: rgba(248, 243, 230, 0.04);
+      border: 1px solid rgba(248, 243, 230, 0.08);
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+    .ritual-item:hover { background: rgba(248, 243, 230, 0.08); border-color: rgba(248, 243, 230, 0.18); }
+
+    .ritual-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--amber-soft);
+      font-weight: 500;
+      text-align: center;
+      letter-spacing: 0.1em;
+    }
+
+    .ritual-text {
+      min-width: 0;
+    }
+    .ritual-text-title {
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      font-weight: 460;
+      color: var(--paper-bright);
+      letter-spacing: -0.01em;
+      margin-bottom: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .ritual-text-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: rgba(248, 243, 230, 0.55);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ritual-action-btn {
+      background: transparent;
+      border: 1px solid rgba(248, 243, 230, 0.3);
+      color: var(--paper-bright);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ritual-action-btn:hover { border-color: var(--amber-soft); color: var(--amber-soft); }
+    .ritual-action-btn.done {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: #1A1612;
+    }
+
+    .ritual-empty {
+      text-align: center;
+      padding: 30px 20px;
+      color: rgba(248, 243, 230, 0.5);
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 15px;
+    }
+
+    /* ============ COMPARISON TABLE ============ */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      overflow: hidden;
+      background: var(--paper-bright);
+    }
+    .compare-col { padding: 18px 20px; }
+    .compare-col + .compare-col { border-left: 1px dashed var(--line); }
+    .compare-head {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--line);
+    }
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 10px 0;
+      font-size: 12.5px;
+      line-height: 1.45;
+      border-bottom: 1px dotted var(--line-soft);
+    }
+    .compare-row:last-child { border-bottom: none; }
+    .compare-row .left { color: var(--ink-soft); }
+    .compare-row .arrow { color: var(--ink-ghost); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+    .compare-row .right { color: var(--ink); font-weight: 500; }
+
+    /* ============ FOOTER ============ */
+    .footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--ink-faint);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-actions { display: flex; gap: 6px; }
+
+    /* ============ ANIMATIONS ============ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    .anim-in { animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
+    .anim-in:nth-child(1) { animation-delay: 0.04s; }
+    .anim-in:nth-child(2) { animation-delay: 0.08s; }
+    .anim-in:nth-child(3) { animation-delay: 0.12s; }
+    .anim-in:nth-child(4) { animation-delay: 0.16s; }
+    .anim-in:nth-child(5) { animation-delay: 0.20s; }
+    .anim-in:nth-child(6) { animation-delay: 0.24s; }
+    .anim-in:nth-child(7) { animation-delay: 0.28s; }
+    .anim-in:nth-child(8) { animation-delay: 0.32s; }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 980px) {
+      .app { padding: 20px 20px 60px; }
+      .grid { grid-template-columns: 1fr; }
+      .masthead { grid-template-columns: 1fr; }
+      .masthead-right { align-items: flex-start; }
+      .form-row { grid-template-columns: 1fr; }
+      .axis-grid { grid-template-columns: 1fr; }
+      .axis-readout { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 560px) {
+      .axis-readout { grid-template-columns: repeat(2, 1fr); }
+      .decision { grid-template-columns: 50px 1fr; }
+      .actions-cell { grid-column: 1 / -1; flex-direction: row; justify-content: flex-end; }
+      .compare { grid-template-columns: 1fr; }
+      .compare-col + .compare-col { border-left: none; border-top: 1px dashed var(--line); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- MASTHEAD -->
+    <header class="masthead">
+      <div class="masthead-left">
+        <div class="kicker">
+          <span class="kicker-dot"></span>
+          <span>Issue 01 — Decision Tools Quarterly</span>
+        </div>
+        <h1 class="title">The <em>IMPACT</em> Matrix.</h1>
+        <p class="subtitle">
+          Eisenhower's grid is useful but treats <strong>importance</strong> as a single dimension and ignores effort, reversibility, and compounding value. Score decisions on six axes instead — and separate one-way doors from two-way doors before you commit.
+        </p>
+      </div>
+      <div class="masthead-right">
+        <div class="label">Today's spread</div>
+        <div class="stat-row">
+          <div class="stat">
+            <div class="label">In play</div>
+            <div class="value mono" id="stat-total">0</div>
+          </div>
+          <div class="stat">
+            <div class="label">Do now</div>
+            <div class="value mono" id="stat-do">0</div>
+          </div>
+          <div class="stat">
+            <div class="label">One-way</div>
+            <div class="value mono" id="stat-door">0</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN GRID -->
+    <div class="grid">
+
+      <!-- LEFT COLUMN -->
+      <div class="col">
+
+        <!-- FORM PANEL -->
+        <section class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Score a decision</h2>
+            <span class="panel-meta">Gut-feel is fine</span>
+          </div>
+
+          <form id="decision-form">
+            <div class="form-row">
+              <div class="field">
+                <label class="field-label" for="d-title">Decision / task</label>
+                <input type="text" id="d-title" placeholder="e.g. Rewrite the onboarding email" required maxlength="120" />
+              </div>
+              <div class="field">
+                <label class="field-label" for="d-desc">Context <span style="text-transform:none; letter-spacing:0; color:var(--ink-ghost)">— optional</span></label>
+                <input type="text" id="d-desc" placeholder="Why now? What unblocks?" maxlength="180" />
+              </div>
+            </div>
+
+            <div class="door-toggle" id="door-toggle">
+              <input type="checkbox" id="d-door" />
+              <div class="door-switch"></div>
+              <div class="door-text">
+                <strong>One-way door?</strong>
+                <small>Toggle on if you can't easily undo this. Slow down, gather 2× evidence.</small>
+              </div>
+            </div>
+
+            <div class="axis-grid">
+              <div class="axis" data-axis="impact">
+                <div class="axis-head">
+                  <div>
+                    <div class="axis-name">Impact</div>
+                    <div class="axis-q">How much does this move the needle?</div>
+                  </div>
+                </div>
+                <div class="axis-controls">
+                  <input type="range" class="slider" min="1" max="5" value="3" />
+                  <span class="axis-value slider-value">3</span>
+                </div>
+              </div>
+
+              <div class="axis" data-axis="momentum">
+                <div class="axis-head">
+                  <div>
+                    <div class="axis-name">Momentum</div>
+                    <div class="axis-q">Does it unlock or accelerate other work?</div>
+                  </div>
+                </div>
+                <div class="axis-controls">
+                  <input type="range" class="slider" min="1" max="5" value="3" />
+                  <span class="axis-value slider-value">3</span>
+                </div>
+              </div>
+
+              <div class="axis" data-axis="probability">
+                <div class="axis-head">
+                  <div>
+                    <div class="axis-name">Probability</div>
+                    <div class="axis-q">How likely is success if I do it?</div>
+                  </div>
+                </div>
+                <div class="axis-controls">
+                  <input type="range" class="slider" min="1" max="5" value="3" />
+                  <span class="axis-value slider-value">3</span>
+                </div>
+              </div>
+
+              <div class="axis" data-axis="altitude">
+                <div class="axis-head">
+                  <div>
+                    <div class="axis-name">Altitude</div>
+                    <div class="axis-q">Aligned with your top goals, not busywork?</div>
+                  </div>
+                </div>
+                <div class="axis-controls">
+                  <input type="range" class="slider" min="1" max="5" value="3" />
+                  <span class="axis-value slider-value">3</span>
+                </div>
+              </div>
+
+              <div class="axis" data-axis="cost">
+                <div class="axis-head">
+                  <div>
+                    <div class="axis-name">Cost</div>
+                    <div class="axis-q">5 = cheap & quick · 1 = expensive & slow</div>
+                  </div>
+                </div>
+                <div class="axis-controls">
+                  <input type="range" class="slider" min="1" max="5" value="3" />
+                  <span class="axis-value slider-value">3</span>
+                </div>
+              </div>
+
+              <div class="axis" data-axis="time">
+                <div class="axis-head">
+                  <div>
+                    <div class="axis-name">Time-sensitivity</div>
+                    <div class="axis-q">Does delay destroy value?</div>
+                  </div>
+                </div>
+                <div class="axis-controls">
+                  <input type="range" class="slider" min="1" max="5" value="3" />
+                  <span class="axis-value slider-value">3</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <div class="live-score">
+                Live score · <span class="live-score-num" id="live-num">27</span><span style="font-size:11px; color:var(--ink-ghost)">/55</span>
+                <span class="action-tag" id="live-tag" style="margin-left:6px">—</span>
+              </div>
+              <div style="display:flex; gap:8px">
+                <button type="button" class="btn btn-ghost" id="load-sample">Try sample</button>
+                <button type="submit" class="btn">Add to matrix</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <!-- DECISION LIST -->
+        <section class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">The spread</h2>
+            <span class="panel-meta" id="list-meta">Sorted by score</span>
+          </div>
+
+          <div class="list-controls">
+            <div class="filter-chips" id="filter-chips">
+              <button class="chip active" data-filter="all">All</button>
+              <button class="chip" data-filter="do">Do now</button>
+              <button class="chip" data-filter="schedule">Schedule</button>
+              <button class="chip" data-filter="batch">Batch</button>
+              <button class="chip" data-filter="kill">Kill</button>
+              <button class="chip" data-filter="door">One-way doors</button>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center">
+              <button class="btn-link" id="clear-all">Clear all</button>
+            </div>
+          </div>
+
+          <div class="decision-list" id="decision-list"></div>
+        </section>
+
+        <!-- EISENHOWER vs IMPACT -->
+        <section class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Why this beats Eisenhower</h2>
+            <span class="panel-meta">The upgrade</span>
+          </div>
+
+          <div class="compare">
+            <div class="compare-col">
+              <div class="compare-head">Eisenhower weakness</div>
+              <div class="compare-row"><span class="left">"Important" is subjective</span><span class="arrow">→</span><span class="right">Forces you to define why</span></div>
+              <div class="compare-row"><span class="left">No effort dimension</span><span class="arrow">→</span><span class="right">Cost axis prevents over-invest</span></div>
+              <div class="compare-row"><span class="left">Ignores reversibility</span><span class="arrow">→</span><span class="right">One-way door override</span></div>
+              <div class="compare-row"><span class="left">Binary quadrants</span><span class="arrow">→</span><span class="right">Continuous score 0–55</span></div>
+              <div class="compare-row"><span class="left">No compounding logic</span><span class="arrow">→</span><span class="right">Momentum axis (second-order)</span></div>
+              <div class="compare-row"><span class="left">Static</span><span class="arrow">→</span><span class="right">Time-sensitivity keeps it dynamic</span></div>
+            </div>
+            <div class="compare-col">
+              <div class="compare-head">Decision rules</div>
+              <div class="compare-row"><span class="left mono" style="color:var(--amber)">≥ 40</span><span class="arrow">→</span><span class="right">Do it now</span></div>
+              <div class="compare-row"><span class="left mono" style="color:var(--sage)">30–39</span><span class="arrow">→</span><span class="right">Schedule it</span></div>
+              <div class="compare-row"><span class="left mono" style="color:var(--blue)">20–29</span><span class="arrow">→</span><span class="right">Delegate or batch</span></div>
+              <div class="compare-row"><span class="left mono" style="color:var(--clay)">&lt; 20</span><span class="arrow">→</span><span class="right">Delete or revisit quarterly</span></div>
+              <div class="compare-row"><span class="left" style="color:var(--door); font-family:'JetBrains Mono',monospace; font-size:11px">ONE-WAY</span><span class="arrow">→</span><span class="right">2× evidence · consult others</span></div>
+              <div class="compare-row"><span class="left" style="color:var(--sage); font-family:'JetBrains Mono',monospace; font-size:11px">TWO-WAY</span><span class="arrow">→</span><span class="right">Decide fast, bias to action</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="col">
+
+        <!-- MATRIX -->
+        <section class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Impact × Effort</h2>
+            <span class="panel-meta">Bubble = momentum · Color = door</span>
+          </div>
+
+          <div class="matrix-wrap">
+            <svg class="matrix-svg" viewBox="0 0 520 500" id="matrix-svg" preserveAspectRatio="xMidYMid meet">
+              <!-- background paper -->
+              <rect x="0" y="0" width="520" height="500" fill="transparent" />
+
+              <!-- quadrant fills -->
+              <g id="quadrants">
+                <!-- top-left: quick wins -->
+                <rect x="60" y="40" width="200" height="195" fill="var(--sage-bg)" opacity="0.35" />
+                <!-- top-right: big bets -->
+                <rect x="260" y="40" width="200" height="195" fill="var(--amber-bg)" opacity="0.35" />
+                <!-- bottom-left: fill-ins -->
+                <rect x="60" y="235" width="200" height="195" fill="var(--blue-bg)" opacity="0.35" />
+                <!-- bottom-right: money pits -->
+                <rect x="260" y="235" width="200" height="195" fill="var(--clay-bg)" opacity="0.35" />
+              </g>
+
+              <!-- gridlines -->
+              <g stroke="var(--line-soft)" stroke-width="1" stroke-dasharray="2 4">
+                <line x1="60" y1="137" x2="460" y2="137" />
+                <line x1="60" y1="235" x2="460" y2="235" />
+                <line x1="60" y1="332" x2="460" y2="332" />
+                <line x1="160" y1="40" x2="160" y2="430" />
+                <line x1="260" y1="40" x2="260" y2="430" />
+                <line x1="360" y1="40" x2="360" y2="430" />
+              </g>
+
+              <!-- axes -->
+              <line x1="60" y1="430" x2="460" y2="430" stroke="var(--ink-soft)" stroke-width="1.5" />
+              <line x1="60" y1="430" x2="60" y2="40" stroke="var(--ink-soft)" stroke-width="1.5" />
+
+              <!-- axis ticks -->
+              <g class="matrix-axis-text">
+                <text x="60" y="448" text-anchor="middle">5</text>
+                <text x="160" y="448" text-anchor="middle">4</text>
+                <text x="260" y="448" text-anchor="middle">3</text>
+                <text x="360" y="448" text-anchor="middle">2</text>
+                <text x="460" y="448" text-anchor="middle">1</text>
+
+                <text x="52" y="434" text-anchor="end">1</text>
+                <text x="52" y="336" text-anchor="end">2</text>
+                <text x="52" y="239" text-anchor="end">3</text>
+                <text x="52" y="141" text-anchor="end">4</text>
+                <text x="52" y="44" text-anchor="end">5</text>
+              </g>
+
+              <!-- axis labels -->
+              <g>
+                <text class="matrix-axis-text" x="260" y="475" text-anchor="middle" style="font-size:10px">Cost score (low → high effort)</text>
+                <text class="matrix-axis-text" x="22" y="235" text-anchor="middle" transform="rotate(-90, 22, 235)" style="font-size:10px">Impact score (low → high)</text>
+              </g>
+
+              <!-- quadrant labels -->
+              <g>
+                <text class="matrix-quadrant-label" x="74" y="62" fill="var(--sage)">Quick wins</text>
+                <text class="matrix-quadrant" x="74" y="78">do now</text>
+
+                <text class="matrix-quadrant-label" x="446" y="62" fill="var(--amber)" text-anchor="end">Big bets</text>
+                <text class="matrix-quadrant" x="446" y="78" text-anchor="end">plan carefully</text>
+
+                <text class="matrix-quadrant-label" x="74" y="418" fill="var(--blue)">Fill-ins</text>
+                <text class="matrix-quadrant" x="74" y="406">batch / auto</text>
+
+                <text class="matrix-quadrant-label" x="446" y="418" fill="var(--clay)" text-anchor="end">Money pits</text>
+                <text class="matrix-quadrant" x="446" y="406" text-anchor="end">kill</text>
+              </g>
+
+              <!-- bubbles go here -->
+              <g id="bubbles"></g>
+            </svg>
+          </div>
+
+          <div class="matrix-legend">
+            <div class="legend-block">
+              <div class="legend-swatch" style="background:var(--sage-bright)"></div>
+              <span class="legend-label">Two-way door</span>
+            </div>
+            <div class="legend-block">
+              <div class="legend-swatch" style="background:var(--door)"></div>
+              <span class="legend-label">One-way door</span>
+            </div>
+            <div class="legend-block">
+              <div style="display:flex; gap:3px; align-items:center">
+                <div style="width:6px; height:6px; border-radius:50%; background:var(--ink-soft)"></div>
+                <div style="width:12px; height:12px; border-radius:50%; background:var(--ink-soft)"></div>
+                <div style="width:20px; height:20px; border-radius:50%; background:var(--ink-soft)"></div>
+              </div>
+              <span class="legend-label">Momentum</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- RITUAL -->
+        <section class="ritual">
+          <div class="ritual-header">
+            <h2 class="ritual-title">The 5-minute ritual.</h2>
+            <span class="ritual-count">Commit to the top 3</span>
+          </div>
+
+          <div class="ritual-list" id="ritual-list"></div>
+        </section>
+
+        <!-- SAMPLES / TEMPLATE -->
+        <section class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Quick recipes</h2>
+            <span class="panel-meta">Pre-filled examples</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px">
+            <button class="btn-link" data-sample="startup" style="text-align:left; padding:10px 12px; border:1px solid var(--line); border-radius:3px; background:var(--paper-bright); color:var(--ink-soft); font-family:'Manrope',sans-serif; font-size:13px; text-transform:none; letter-spacing:0">
+              <span style="font-family:'Fraunces',serif; font-weight:500; color:var(--ink)">For a founder</span> — fundraising, hiring, product, ops
+            </button>
+            <button class="btn-link" data-sample="creator" style="text-align:left; padding:10px 12px; border:1px solid var(--line); border-radius:3px; background:var(--paper-bright); color:var(--ink-soft); font-family:'Manrope',sans-serif; font-size:13px; text-transform:none; letter-spacing:0">
+              <span style="font-family:'Fraunces',serif; font-weight:500; color:var(--ink)">For a creator</span> — content, audience, monetization
+            </button>
+            <button class="btn-link" data-sample="personal" style="text-align:left; padding:10px 12px; border:1px solid var(--line); border-radius:3px; background:var(--paper-bright); color:var(--ink-soft); font-family:'Manrope',sans-serif; font-size:13px; text-transform:none; letter-spacing:0">
+              <span style="font-family:'Fraunces',serif; font-weight:500; color:var(--ink)">For personal life</span> — health, money, relationships
+            </button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div>IMPACT Matrix — A better decision tool. Data stays in your browser.</div>
+      <div class="footer-actions">
+        <button class="btn-link" id="export-btn">Export JSON</button>
+        <button class="btn-link" id="import-btn">Import</button>
+        <input type="file" id="import-file" accept="application/json" style="display:none" />
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // ============ STATE ============
+    const STORAGE_KEY = 'impact-matrix-v1';
+    const state = {
+      decisions: [],
+      filter: 'all',
+    };
+
+    // ============ SCORING ============
+    const WEIGHTS = { impact: 3, momentum: 2, probability: 2, altitude: 2, cost: 1, time: 1 };
+    const MAX_SCORE = 55;
+
+    function scoreOf(d) {
+      return (d.impact * WEIGHTS.impact)
+           + (d.momentum * WEIGHTS.momentum)
+           + (d.probability * WEIGHTS.probability)
+           + (d.altitude * WEIGHTS.altitude)
+           + (d.cost * WEIGHTS.cost)
+           + (d.time * WEIGHTS.time);
+    }
+
+    function tierOf(score, door) {
+      if (door && score >= 30) return { key: 'amber', label: 'Plan carefully' };
+      if (score >= 40) return { key: 'amber', label: 'Do it now' };
+      if (score >= 30) return { key: 'sage', label: 'Schedule' };
+      if (score >= 20) return { key: 'blue', label: 'Batch / delegate' };
+      return { key: 'clay', label: 'Delete' };
+    }
+
+    // ============ PERSISTENCE ============
+    function load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed.decisions)) state.decisions = parsed.decisions;
+        }
+      } catch (e) {
+        console.warn('Could not load state', e);
+      }
+    }
+
+    function save() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ decisions: state.decisions }));
+      } catch (e) {
+        console.warn('Could not save state', e);
+      }
+    }
+
+    // ============ RENDERING ============
+    function uid() { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); }
+
+    function escapeHTML(s) {
+      return (s || '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    }
+
+    function filteredDecisions() {
+      let list = state.decisions.slice();
+      if (state.filter === 'do') list = list.filter(d => scoreOf(d) >= 40);
+      else if (state.filter === 'schedule') list = list.filter(d => { const s = scoreOf(d); return s >= 30 && s < 40; });
+      else if (state.filter === 'batch') list = list.filter(d => { const s = scoreOf(d); return s >= 20 && s < 30; });
+      else if (state.filter === 'kill') list = list.filter(d => scoreOf(d) < 20);
+      else if (state.filter === 'door') list = list.filter(d => d.door);
+      list.sort((a, b) => scoreOf(b) - scoreOf(a));
+      return list;
+    }
+
+    function renderList() {
+      const root = document.getElementById('decision-list');
+      const list = filteredDecisions();
+
+      if (state.decisions.length === 0) {
+        root.innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">§</div>
+            <div class="empty-text">No decisions yet.</div>
+            <div class="empty-sub">Score one above, or load the sample spread to see how it works.</div>
+          </div>`;
+        return;
+      }
+
+      if (list.length === 0) {
+        root.innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">—</div>
+            <div class="empty-text">Nothing in this filter.</div>
+            <div class="empty-sub">Try a different category.</div>
+          </div>`;
+        return;
+      }
+
+      root.innerHTML = list.map((d, i) => {
+        const s = scoreOf(d);
+        const t = tierOf(s, d.door);
+        const pct = (s / MAX_SCORE) * 100;
+        return `
+          <article class="decision anim-in ${d.door ? 'is-door' : ''} ${d.committed ? 'committed' : ''}" data-id="${d.id}">
+            <div class="score-cell">
+              <div class="score-num ${t.key}">${s}</div>
+              <div class="score-bar ${t.key}" style="height:${Math.max(8, pct * 0.32)}px"></div>
+            </div>
+            <div class="body-cell">
+              <div class="decision-head">
+                <div class="decision-title">${escapeHTML(d.title)}</div>
+                <span class="action-tag ${t.key}">${t.label}</span>
+                ${d.door ? '<span class="door-tag">One-way</span>' : ''}
+              </div>
+              ${d.desc ? `<div class="desc">${escapeHTML(d.desc)}</div>` : ''}
+              <div class="axis-readout">
+                ${['impact','momentum','probability','altitude','cost','time'].map(k => `
+                  <div class="axis-cell">
+                    <div class="axis-cell-label">${k.charAt(0).toUpperCase() + k.slice(1, 3)}</div>
+                    <div class="axis-cell-track">
+                      <div class="axis-cell-fill" style="width:${(d[k] / 5) * 100}%"></div>
+                    </div>
+                    <div class="axis-cell-value">${d[k]}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            <div class="actions-cell">
+              <button class="icon-btn commit ${d.committed ? 'committed' : ''}" data-act="commit" title="${d.committed ? 'Uncommit' : 'Commit to it'}">
+                ${d.committed ? '★' : '☆'}
+              </button>
+              <button class="icon-btn" data-act="edit" title="Edit">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              </button>
+              <button class="icon-btn" data-act="delete" title="Delete">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/></svg>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // attach handlers
+      root.querySelectorAll('.decision').forEach(el => {
+        const id = el.dataset.id;
+        el.querySelector('[data-act="commit"]').addEventListener('click', () => toggleCommit(id));
+        el.querySelector('[data-act="edit"]').addEventListener('click', () => startEdit(id));
+        el.querySelector('[data-act="delete"]').addEventListener('click', () => deleteDecision(id));
+      });
+    }
+
+    function renderMatrix() {
+      const g = document.getElementById('bubbles');
+      const list = state.decisions;
+      if (list.length === 0) {
+        g.innerHTML = '';
+        return;
+      }
+
+      // Map scores (1-5) to pixel coordinates
+      // Impact 5 -> top (y=70), Impact 1 -> bottom (y=400) (inner area)
+      // Cost 5 -> left effort (x=90), Cost 1 -> right effort (x=430)
+      // Cost axis: x = 90 + ((5 - cost) / 4) * 340
+      // Impact axis: y = 70 + ((5 - impact) / 4) * 330
+      function xPos(cost) { return 90 + ((5 - cost) / 4) * 340; }
+      function yPos(impact) { return 70 + ((5 - impact) / 4) * 330; }
+      function radius(momentum) { return 7 + (momentum / 5) * 18; }
+
+      const sorted = list.slice().sort((a, b) => scoreOf(b) - scoreOf(a));
+
+      g.innerHTML = sorted.map((d, i) => {
+        const cx = xPos(d.cost);
+        const cy = yPos(d.impact);
+        const r = radius(d.momentum);
+        const color = d.door ? 'var(--door)' : 'var(--sage-bright)';
+        const stroke = d.door ? 'var(--door)' : 'var(--sage)';
+        const text = (i + 1).toString();
+        const dimClass = state.filter === 'door' && !d.door ? 'dim' : '';
+        return `
+          <g class="bubble ${dimClass}" data-id="${d.id}">
+            <circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" fill-opacity="0.85" stroke="${stroke}" stroke-width="1.5" />
+            <text class="bubble-text" x="${cx}" y="${cy + 3.5}">${text}</text>
+          </g>
+        `;
+      }).join('');
+
+      g.querySelectorAll('.bubble').forEach(b => {
+        b.addEventListener('click', () => {
+          const id = b.dataset.id;
+          const el = document.querySelector(`.decision[data-id="${id}"]`);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      });
+    }
+
+    function renderRitual() {
+      const root = document.getElementById('ritual-list');
+      const top3 = filteredDecisions().slice(0, 3);
+
+      if (top3.length === 0) {
+        root.innerHTML = `<div class="ritual-empty">Add some decisions, then commit to the top three.</div>`;
+        return;
+      }
+
+      root.innerHTML = top3.map((d, i) => {
+        const s = scoreOf(d);
+        return `
+          <div class="ritual-item">
+            <div class="ritual-num">${['I', 'II', 'III'][i]}</div>
+            <div class="ritual-text">
+              <div class="ritual-text-title">${escapeHTML(d.title)}</div>
+              <div class="ritual-text-meta">
+                <span>Score ${s}</span>
+                <span>${d.door ? 'One-way' : 'Two-way'}</span>
+                <span>I${d.impact} M${d.momentum} P${d.probability} A${d.altitude} C${d.cost} T${d.time}</span>
+              </div>
+            </div>
+            <button class="ritual-action-btn ${d.committed ? 'done' : ''}" data-id="${d.id}">${d.committed ? 'Committed' : 'Commit'}</button>
+          </div>
+        `;
+      }).join('');
+
+      root.querySelectorAll('.ritual-action-btn').forEach(btn => {
+        btn.addEventListener('click', () => toggleCommit(btn.dataset.id));
+      });
+    }
+
+    function renderStats() {
+      const total = state.decisions.length;
+      const doNow = state.decisions.filter(d => scoreOf(d) >= 40).length;
+      const doors = state.decisions.filter(d => d.door).length;
+      document.getElementById('stat-total').textContent = String(total).padStart(2, '0');
+      document.getElementById('stat-do').textContent = String(doNow).padStart(2, '0');
+      document.getElementById('stat-door').textContent = String(doors).padStart(2, '0');
+    }
+
+    function renderAll() {
+      save();
+      renderList();
+      renderMatrix();
+      renderRitual();
+      renderStats();
+    }
+
+    // ============ ACTIONS ============
+    function addDecision(d) {
+      state.decisions.push({ id: uid(), createdAt: Date.now(), committed: false, ...d });
+      renderAll();
+    }
+
+    function deleteDecision(id) {
+      const d = state.decisions.find(x => x.id === id);
+      if (!d) return;
+      if (!confirm(`Delete "${d.title}"?`)) return;
+      state.decisions = state.decisions.filter(x => x.id !== id);
+      renderAll();
+    }
+
+    function startEdit(id) {
+      const d = state.decisions.find(x => x.id === id);
+      if (!d) return;
+      // populate form
+      document.getElementById('d-title').value = d.title;
+      document.getElementById('d-desc').value = d.desc || '';
+      document.getElementById('d-door').checked = !!d.door;
+      updateDoorUI();
+      ['impact','momentum','probability','altitude','cost','time'].forEach(k => {
+        const axis = document.querySelector(`.axis[data-axis="${k}"]`);
+        const slider = axis.querySelector('input.slider');
+        const out = axis.querySelector('.slider-value');
+        slider.value = d[k];
+        out.textContent = d[k];
+      });
+      updateLiveScore();
+      // remove old
+      state.decisions = state.decisions.filter(x => x.id !== id);
+      renderAll();
+      document.getElementById('d-title').focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleCommit(id) {
+      const d = state.decisions.find(x => x.id === id);
+      if (!d) return;
+      d.committed = !d.committed;
+      renderAll();
+    }
+
+    // ============ FORM ============
+    function readForm() {
+      const title = document.getElementById('d-title').value.trim();
+      const desc = document.getElementById('d-desc').value.trim();
+      const door = document.getElementById('d-door').checked;
+      const scores = {};
+      ['impact','momentum','probability','altitude','cost','time'].forEach(k => {
+        const v = parseInt(document.querySelector(`.axis[data-axis="${k}"] input.slider`).value, 10);
+        scores[k] = isNaN(v) ? 3 : v;
+      });
+      return { title, desc, door, ...scores };
+    }
+
+    function resetForm() {
+      document.getElementById('d-title').value = '';
+      document.getElementById('d-desc').value = '';
+      document.getElementById('d-door').checked = false;
+      updateDoorUI();
+      ['impact','momentum','probability','altitude','cost','time'].forEach(k => {
+        const axis = document.querySelector(`.axis[data-axis="${k}"]`);
+        const slider = axis.querySelector('input.slider');
+        const out = axis.querySelector('.slider-value');
+        slider.value = 3;
+        out.textContent = 3;
+      });
+      updateLiveScore();
+    }
+
+    function updateLiveScore() {
+      const data = readForm();
+      const s = scoreOf(data);
+      const t = tierOf(s, data.door);
+      const num = document.getElementById('live-num');
+      const tag = document.getElementById('live-tag');
+      num.textContent = s;
+      num.className = 'live-score-num ' + t.key;
+      tag.className = 'action-tag ' + t.key;
+      tag.textContent = t.label;
+    }
+
+    function updateDoorUI() {
+      const checked = document.getElementById('d-door').checked;
+      const wrap = document.getElementById('door-toggle');
+      wrap.classList.toggle('active', checked);
+    }
+
+    // ============ SAMPLES ============
+    const SAMPLES = {
+      startup: [
+        { title: 'Pitch a top-3 VC for Series A', desc: 'First lead investor. Hard to walk back once you sign.', impact: 5, momentum: 5, probability: 3, altitude: 5, cost: 2, time: 5, door: true },
+        { title: 'Hire senior engineer #1', desc: 'Sets the bar for every hire after.', impact: 5, momentum: 5, probability: 4, altitude: 5, cost: 2, time: 4, door: true },
+        { title: 'Ship onboarding redesign', desc: 'Conversion is leaking at the 2nd screen.', impact: 4, momentum: 3, probability: 4, altitude: 4, cost: 3, time: 4, door: false },
+        { title: 'Set up analytics dashboard', desc: 'Foundational but not urgent.', impact: 3, momentum: 4, probability: 5, altitude: 3, cost: 4, time: 2, door: false },
+        { title: 'Re-write the marketing site', desc: 'Looks tired; would take 2 weeks.', impact: 2, momentum: 2, probability: 4, altitude: 2, cost: 2, time: 1, door: false },
+        { title: 'Read 3 industry reports', desc: 'Background reading for next quarter.', impact: 2, momentum: 2, probability: 5, altitude: 3, cost: 5, time: 1, door: false },
+      ],
+      creator: [
+        { title: 'Ship the magnum opus essay', desc: 'Three months of work, biggest piece yet.', impact: 5, momentum: 5, probability: 4, altitude: 5, cost: 2, time: 5, door: false },
+        { title: 'Launch paid newsletter tier', desc: 'New revenue line. Can iterate pricing later.', impact: 4, momentum: 4, probability: 4, altitude: 4, cost: 3, time: 4, door: false },
+        { title: 'Cold-DM 10 podcast hosts', desc: 'Quick outreach sprint.', impact: 3, momentum: 3, probability: 3, altitude: 4, cost: 5, time: 4, door: false },
+        { title: 'Re-edit old videos into shorts', desc: 'Repurpose the back catalog.', impact: 2, momentum: 2, probability: 5, altitude: 2, cost: 4, time: 2, door: false },
+        { title: 'Quit the day job', desc: 'One-way door. Big life decision.', impact: 5, momentum: 4, probability: 3, altitude: 5, cost: 1, time: 3, door: true },
+      ],
+      personal: [
+        { title: 'Book the surgery', desc: 'Putting it off is making it worse.', impact: 5, momentum: 3, probability: 5, altitude: 5, cost: 3, time: 5, door: true },
+        { title: 'Move apartments', desc: 'Current place is wearing on you.', impact: 3, momentum: 2, probability: 4, altitude: 3, cost: 2, time: 3, door: true },
+        { title: 'Daily 20-min walk', desc: 'Tiny, reversible, compounds.', impact: 3, momentum: 4, probability: 5, altitude: 4, cost: 5, time: 2, door: false },
+        { title: 'Catch up with old friend', desc: 'Reconnect before more time passes.', impact: 3, momentum: 1, probability: 5, altitude: 3, cost: 5, time: 4, door: false },
+        { title: 'Read 12 books this year', desc: 'Ambitious stretch goal.', impact: 2, momentum: 2, probability: 3, altitude: 3, cost: 3, time: 1, door: false },
+        { title: 'Buy the expensive espresso machine', desc: 'You\'ll use it, but is now the time?', impact: 1, momentum: 1, probability: 5, altitude: 1, cost: 2, time: 1, door: false },
+      ],
+    };
+
+    function loadSampleSet(key) {
+      const samples = SAMPLES[key];
+      if (!samples) return;
+      if (state.decisions.length > 0 && !confirm('Replace your current spread with the sample set?')) return;
+      state.decisions = samples.map(s => ({ id: uid(), createdAt: Date.now(), committed: false, ...s }));
+      renderAll();
+    }
+
+    // ============ EVENT WIRING ============
+    function init() {
+      load();
+      renderAll();
+      updateLiveScore();
+
+      // sliders
+      document.querySelectorAll('.axis input.slider').forEach(slider => {
+        const out = slider.parentElement.querySelector('.slider-value');
+        out.textContent = slider.value;
+        slider.addEventListener('input', () => {
+          out.textContent = slider.value;
+          updateLiveScore();
+        });
+      });
+
+      // door
+      const doorToggle = document.getElementById('door-toggle');
+      const doorInput = document.getElementById('d-door');
+      doorToggle.addEventListener('click', (e) => {
+        if (e.target.tagName === 'INPUT') return;
+        doorInput.checked = !doorInput.checked;
+        updateDoorUI();
+        updateLiveScore();
+      });
+      doorInput.addEventListener('change', () => {
+        updateDoorUI();
+        updateLiveScore();
+      });
+
+      // form
+      document.getElementById('decision-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = readForm();
+        if (!data.title) return;
+        addDecision(data);
+        resetForm();
+      });
+
+      document.getElementById('load-sample').addEventListener('click', () => {
+        const keys = Object.keys(SAMPLES);
+        const k = keys[Math.floor(Math.random() * keys.length)];
+        loadSampleSet(k);
+      });
+
+      // sample recipe buttons
+      document.querySelectorAll('[data-sample]').forEach(btn => {
+        btn.addEventListener('click', () => loadSampleSet(btn.dataset.sample));
+      });
+
+      // filters
+      document.getElementById('filter-chips').addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        document.querySelectorAll('#filter-chips .chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        state.filter = chip.dataset.filter;
+        renderList();
+        renderMatrix();
+        renderRitual();
+      });
+
+      // clear all
+      document.getElementById('clear-all').addEventListener('click', () => {
+        if (state.decisions.length === 0) return;
+        if (!confirm('Delete all decisions? This cannot be undone.')) return;
+        state.decisions = [];
+        renderAll();
+      });
+
+      // export
+      document.getElementById('export-btn').addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify({ decisions: state.decisions }, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `impact-matrix-${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      // import
+      document.getElementById('import-btn').addEventListener('click', () => {
+        document.getElementById('import-file').click();
+      });
+      document.getElementById('import-file').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          if (Array.isArray(parsed.decisions)) {
+            state.decisions = parsed.decisions;
+            renderAll();
+          } else {
+            alert('Invalid file format.');
+          }
+        } catch (err) {
+          alert('Could not import file: ' + err.message);
+        }
+        e.target.value = '';
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
