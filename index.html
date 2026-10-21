@@ -1403,6 +1403,7 @@
                 <span class="action-tag" id="live-tag" style="margin-left:6px">—</span>
               </div>
               <div style="display:flex; gap:8px">
+                <button type="button" class="btn btn-ghost" id="start-fresh" title="Clear all entries and reset the form">Reset</button>
                 <button type="button" class="btn btn-ghost" id="load-sample">Try sample</button>
                 <button type="submit" class="btn">Add to matrix</button>
               </div>
@@ -2118,6 +2119,30 @@
         renderAll();
       });
 
+      // start fresh — wipe entries, reset the form, reset the filter
+      document.getElementById('start-fresh').addEventListener('click', () => {
+        const hasEntries = state.decisions.length > 0;
+        const formDirty = document.getElementById('d-title').value.trim() !== ''
+          || document.getElementById('d-desc').value.trim() !== ''
+          || document.getElementById('d-door').checked;
+
+        if (!hasEntries && !formDirty) return;
+
+        const message = hasEntries
+          ? `Delete all ${state.decisions.length} entries and start fresh?\n\nThis cannot be undone.`
+          : 'Reset the form?';
+        if (!confirm(message)) return;
+
+        state.decisions = [];
+        state.filter = 'all';
+        document.querySelectorAll('#filter-chips .chip').forEach(c => {
+          c.classList.toggle('active', c.dataset.filter === 'all');
+        });
+        resetForm();
+        renderAll();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
       // export
       document.getElementById('export-btn').addEventListener('click', () => {
         const blob = new Blob([JSON.stringify({ decisions: state.decisions }, null, 2)], { type: 'application/json' });
@@ -2169,7 +2194,7 @@
 
 <script data-minimax-analytics="minimax-website-analytics-v1">(function(){
 "use strict";
-var t="eyJ2IjoxLCJraWQiOiJwcmUtdXMtMjAyNjA4MTUtdjEiLCJiaXpfaWQiOiJNYXZpcyIsIm5vZGVfaWQiOiI0NTQxNjg0NDY1Mjk4NjIiLCJpc3N1ZWRfYXQiOjE3OTI0MzM4NDE0Mzl9.zsM5NLz194FZufSZuOAbP0C_Vf7fSsU3ljxhmMJSzAY",u="https://agent.minimax.io/minimax-cloud/api/v1/website-traffic/page-views",last="";
+var t="eyJ2IjoxLCJraWQiOiJwcmUtdXMtMjAyNjA4MTUtdjEiLCJiaXpfaWQiOiJNYXZpcyIsIm5vZGVfaWQiOiI0NTQ2NDA0OTU4NjU5NzMiLCJpc3N1ZWRfYXQiOjE3OTI1NDk2ODAzNTl9.DKPg76b3E8VVrwQjRmgVE2ZXusdWtorXg9QoIeQkYWU",u="https://agent.minimax.io/minimax-cloud/api/v1/website-traffic/page-views",last="";
 function path(){
 var h=window.location.hash||"",p=h.indexOf("#!")===0?h.slice(2):h.indexOf("#/")===0?h.slice(1):(window.location.pathname||"/");
 p=p.split(/[?#]/,1)[0]||"/";
